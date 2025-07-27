@@ -1,4 +1,4 @@
-# Eva 🧪
+# eva
 
 [![npm version](https://badge.fury.io/js/@lilac-labs%2Feva.svg)](https://badge.fury.io/js/@lilac-labs%2Feva)
 [![CI](https://github.com/lilac-labs/eva/actions/workflows/ci.yml/badge.svg)](https://github.com/lilac-labs/eva/actions/workflows/ci.yml)
@@ -26,8 +26,8 @@ npm install @lilac-labs/eva
 ## 🚀 Quick Start
 
 ```typescript
-import { Eval } from '@lilac-labs/eva';
-import type { DataItem, BaseScore } from '@lilac-labs/eva';
+import { Eval } from "@lilac-labs/eva";
+import type { DataItem, BaseScore } from "@lilac-labs/eva";
 
 // Define your evaluation types
 interface MyInput {
@@ -51,41 +51,48 @@ interface MyScore extends BaseScore {
 const evaluation = new Eval<MyInput, MyExpected, MyOutput, MyScore>({
   // Provide test data
   dataProvider: () => [
-    { 
-      input: { question: "What is 2+2?" }, 
-      expected: { answer: "4" } 
+    {
+      input: { question: "What is 2+2?" },
+      expected: { answer: "4" },
     },
-    { 
-      input: { question: "What is the capital of France?" }, 
-      expected: { answer: "Paris" } 
-    }
+    {
+      input: { question: "What is the capital of France?" },
+      expected: { answer: "Paris" },
+    },
   ],
-  
+
   // Define the task to evaluate
   taskFn: async ({ data }) => {
     // Your system under test (e.g., API call, model inference)
     const response = await myAIModel.generate(data.input.question);
     return { response };
   },
-  
+
   // Define scoring functions
   scorers: [
     ({ output, data }) => ({
-      name: 'exact-match',
-      value: output.response.toLowerCase() === data.expected?.answer.toLowerCase() ? 1 : 0
+      name: "exact-match",
+      value:
+        output.response.toLowerCase() === data.expected?.answer.toLowerCase()
+          ? 1
+          : 0,
     }),
     ({ output, data }) => ({
-      name: 'contains-answer',
-      value: output.response.toLowerCase().includes(data.expected?.answer.toLowerCase() || '') ? 1 : 0
-    })
+      name: "contains-answer",
+      value: output.response
+        .toLowerCase()
+        .includes(data.expected?.answer.toLowerCase() || "")
+        ? 1
+        : 0,
+    }),
   ],
-  
+
   // Configuration
   config: {
-    name: 'ai-model-evaluation',
+    name: "ai-model-evaluation",
     maxConcurrency: 3,
-    outputDir: './results'
-  }
+    outputDir: "./results",
+  },
 });
 
 // Run the evaluation
@@ -96,21 +103,25 @@ console.log(`Completed ${results.scores.length} evaluations`);
 ## 📚 Core Concepts
 
 ### DataItem
+
 Represents a single evaluation case:
+
 ```typescript
 interface DataItem<Input, Expected> {
-  input: Input;           // The input to your system
-  expected?: Expected;    // Expected output (optional)
+  input: Input; // The input to your system
+  expected?: Expected; // Expected output (optional)
   metadata?: Record<string, unknown>; // Additional context
 }
 ```
 
 ### Scorers
+
 Functions that evaluate output quality:
+
 ```typescript
 type Scorer<Output, Score> = ({
   output,
-  data
+  data,
 }: {
   output: Output;
   data: DataItem<Input, Expected>;
@@ -118,17 +129,19 @@ type Scorer<Output, Score> = ({
 ```
 
 ### Configuration
+
 ```typescript
 interface EvalConfig {
-  name: string;           // Evaluation name
+  name: string; // Evaluation name
   maxConcurrency: number; // Concurrent task limit
-  outputDir?: string;     // Optional JSONL output directory
+  outputDir?: string; // Optional JSONL output directory
 }
 ```
 
 ## 🎯 Scoring Examples
 
 ### String Matching
+
 ```typescript
 // Exact string match
 ({ output, data }) => ({
@@ -144,6 +157,7 @@ interface EvalConfig {
 ```
 
 ### JSON Comparison
+
 ```typescript
 // Deep JSON equality
 ({ output, data }) => ({
@@ -159,6 +173,7 @@ interface EvalConfig {
 ```
 
 ### Numerical Analysis
+
 ```typescript
 // Absolute error
 ({ output, data }) => ({
@@ -169,7 +184,7 @@ interface EvalConfig {
 // Relative error
 ({ output, data }) => ({
   name: 'relative-error',
-  value: data.expected?.value 
+  value: data.expected?.value
     ? Math.abs(output.value - data.expected.value) / Math.abs(data.expected.value)
     : 0
 })
@@ -178,10 +193,11 @@ interface EvalConfig {
 ## 🔧 Advanced Usage
 
 ### Async Data Provider
+
 ```typescript
 const evaluation = new Eval({
   dataProvider: async () => {
-    const response = await fetch('/api/test-cases');
+    const response = await fetch("/api/test-cases");
     return await response.json();
   },
   // ... rest of configuration
@@ -189,19 +205,22 @@ const evaluation = new Eval({
 ```
 
 ### Custom Metadata Scoring
+
 ```typescript
 const scorers = [
   // Score based on input context
   ({ output, data }) => ({
-    name: 'difficulty-adjusted',
-    value: data.metadata?.difficulty === 'hard' 
-      ? output.score * 2  // Double points for hard questions
-      : output.score
-  })
+    name: "difficulty-adjusted",
+    value:
+      data.metadata?.difficulty === "hard"
+        ? output.score * 2 // Double points for hard questions
+        : output.score,
+  }),
 ];
 ```
 
 ### Error Handling
+
 ```typescript
 const taskFn = async ({ data }) => {
   try {
@@ -213,9 +232,9 @@ const taskFn = async ({ data }) => {
 
 const scorers = [
   ({ output }) => ({
-    name: 'success-rate',
-    value: output.success ? 1 : 0
-  })
+    name: "success-rate",
+    value: output.success ? 1 : 0,
+  }),
 ];
 ```
 

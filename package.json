@@ -1,6 +1,6 @@
 {
 	"name": "@lilac-labs/eva",
-	"version": "0.1.0",
+	"version": "0.1.2",
 	"description": "A TypeScript evaluation framework for running concurrent evaluations with progress tracking and result persistence",
 	"keywords": [
 		"evaluation",
