@@ -1,0 +1,19 @@
+{
+	"name": "eva",
+	"version": "0.0.1",
+	"module": "./index.ts",
+	"type": "module",
+	"scripts": {
+		"clean": "rm -rf .turbo node_modules",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"check-types": "tsc -p tsconfig.json --noEmit"
+	},
+	"dependencies": {
+		"cli-progress": "^3.12.0",
+		"p-limit": "^6.2.0"
+	},
+	"devDependencies": {
+		"@types/cli-progress": "^3.11.6"
+	}
+}
