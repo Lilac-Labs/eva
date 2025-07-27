@@ -1,5 +1,5 @@
 {
-	"name": "@eva/eval",
+	"name": "eva-ts",
 	"version": "0.1.4",
 	"description": "A TypeScript evaluation framework for running concurrent evaluations with progress tracking and result persistence",
 	"keywords": [
