@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run clean` - Remove build artifacts and node_modules
 
 ### Build & Test
-This project does not currently have build or test commands configured.
+- `npm run test` - Run all tests using Bun test runner
 
 ## Architecture
 

@@ -1,29 +1,7 @@
 import { calculateAverage } from '@lib/utils/numbers';
 import { Presets, SingleBar } from 'cli-progress';
 import pLimit from 'p-limit';
-
-interface EvalConfig {
-	name: string;
-	maxConcurrency: number;
-	outputDir?: string;
-}
-
-interface ScoreStats {
-	averages: Record<string, number>;
-}
-
-// Define the base score interface with required fields
-export interface BaseScore {
-	name: string;
-	value: number;
-}
-
-// Define the DataItem interface that enforces the structure
-export interface DataItem<Input, Expected> {
-	input: Input;
-	expected?: Expected;
-	metadata?: Record<string, unknown>;
-}
+import type { BaseScore, DataItem, EvalConfig, ScoreStats } from './eval.types';
 
 export class Eval<Input, Expected, Output, Score extends BaseScore> {
 	readonly #dataProvider: () =>
