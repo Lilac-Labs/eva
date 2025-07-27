@@ -16,9 +16,10 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/lilac-labs/eva.git"
+		"url": "https://github.com/lilac-labs/eva.git",
+		"directory": "apps/eval"
 	},
-	"homepage": "https://github.com/lilac-labs/eva#readme",
+	"homepage": "https://github.com/lilac-labs/eva/tree/main/apps/eval#readme",
 	"bugs": {
 		"url": "https://github.com/lilac-labs/eva/issues"
 	},
