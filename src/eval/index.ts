@@ -1,177 +1,155 @@
-import { calculateAverage } from '@lib/utils/numbers';
-import { Presets, SingleBar } from 'cli-progress';
-import pLimit from 'p-limit';
-import type { BaseScore, DataItem, EvalConfig, ScoreStats } from './eval.types';
+import { Presets, SingleBar } from "cli-progress";
+import pLimit from "p-limit";
+
+import type { BaseScore, DataItem, EvalConfig } from "./eval.types";
+
+export type { BaseScore, DataItem, EvalConfig } from "./eval.types";
 
 export class Eval<Input, Expected, Output, Score extends BaseScore> {
-	readonly #dataProvider: () =>
-		| Array<DataItem<Input, Expected>>
-		| Promise<Array<DataItem<Input, Expected>>>;
-	readonly #taskFn: ({
-		data,
-	}: {
-		data: DataItem<Input, Expected>;
-	}) => Output | Promise<Output>;
-	readonly #scorers: Array<
-		({
-			output,
-			data,
-		}: {
-			output: Output;
-			data: DataItem<Input, Expected>;
-		}) => Score | Promise<Score>
-	>;
-	readonly #config: EvalConfig;
+  readonly #dataProvider: () =>
+    | Array<DataItem<Input, Expected>>
+    | Promise<Array<DataItem<Input, Expected>>>;
+  readonly #taskFn: ({
+    data,
+  }: {
+    data: DataItem<Input, Expected>;
+  }) => Output | Promise<Output>;
+  readonly #scorers: Array<
+    ({
+      output,
+      data,
+    }: {
+      output: Output;
+      data: DataItem<Input, Expected>;
+    }) => Score | Promise<Score>
+  >;
+  readonly #config: EvalConfig;
 
-	constructor({
-		dataProvider,
-		taskFn,
-		scorers,
-		config,
-	}: {
-		dataProvider: () =>
-			| Array<DataItem<Input, Expected>>
-			| Promise<Array<DataItem<Input, Expected>>>;
-		taskFn: ({
-			data,
-		}: {
-			data: DataItem<Input, Expected>;
-		}) => Output | Promise<Output>;
-		scorers: Array<
-			({
-				output,
-				data,
-			}: {
-				output: Output;
-				data: DataItem<Input, Expected>;
-			}) => Score | Promise<Score>
-		>;
-		config: EvalConfig;
-	}) {
-		this.#dataProvider = dataProvider;
-		this.#taskFn = taskFn;
-		this.#scorers = scorers;
-		this.#config = config;
-	}
+  constructor({
+    dataProvider,
+    taskFn,
+    scorers,
+    config,
+  }: {
+    dataProvider: () =>
+      | Array<DataItem<Input, Expected>>
+      | Promise<Array<DataItem<Input, Expected>>>;
+    taskFn: ({
+      data,
+    }: {
+      data: DataItem<Input, Expected>;
+    }) => Output | Promise<Output>;
+    scorers: Array<
+      ({
+        output,
+        data,
+      }: {
+        output: Output;
+        data: DataItem<Input, Expected>;
+      }) => Score | Promise<Score>
+    >;
+    config: EvalConfig;
+  }) {
+    this.#dataProvider = dataProvider;
+    this.#taskFn = taskFn;
+    this.#scorers = scorers;
+    this.#config = config;
+  }
 
-	async evaluate(): Promise<{ scores: Score[][] }> {
-		const data = await this.#dataProvider();
+  async evaluate(): Promise<{ scores: Score[][] }> {
+    const data = await this.#dataProvider();
 
-		// Create a concurrency limiter
-		const limit = pLimit(this.#config.maxConcurrency);
+    // Create a concurrency limiter
+    const limit = pLimit(this.#config.maxConcurrency);
 
-		const progressBar = new SingleBar(
-			{
-				format: `${
-					this.#config.name
-				} [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} items`,
-				barCompleteChar: '\u2588',
-				barIncompleteChar: '\u2591',
-			},
-			Presets.shades_classic
-		);
+    const progressBar = new SingleBar(
+      {
+        format: `${
+          this.#config.name
+        } [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} items`,
+        barCompleteChar: "\u2588",
+        barIncompleteChar: "\u2591",
+      },
+      Presets.shades_classic,
+    );
 
-		progressBar.start(data.length, 0);
-		let completed = 0;
+    progressBar.start(data.length, 0);
+    let completed = 0;
 
-		// Prepare output file if outputDir is specified
-		let outputFilePath: string | undefined;
-		if (this.#config.outputDir !== undefined) {
-			const fs = await import('fs/promises');
-			const path = await import('path');
+    // Prepare output file if outputDir is specified
+    let outputFilePath: string | undefined;
+    if (this.#config.outputDir !== undefined) {
+      const fs = await import("fs/promises");
+      const path = await import("path");
 
-			outputFilePath = path.join(
-				this.#config.outputDir,
-				`${this.#config.name}-evaluation-results.jsonl`
-			);
+      outputFilePath = path.join(
+        this.#config.outputDir,
+        `${this.#config.name}-evaluation-results.jsonl`,
+      );
 
-			// Ensure directory exists
-			await fs.mkdir(this.#config.outputDir, { recursive: true });
+      // Ensure directory exists
+      await fs.mkdir(this.#config.outputDir, { recursive: true });
 
-			// Create or clear the file
-			await fs.writeFile(outputFilePath, '');
-		}
+      // Create or clear the file
+      await fs.writeFile(outputFilePath, "");
+    }
 
-		// Process all items concurrently with limited concurrency
-		const promises = data.map((item, index): Promise<Score[]> => {
-			return limit(async (): Promise<Score[]> => {
-				const output = await this.#taskFn({ data: item });
-				const scores = await Promise.all(
-					this.#scorers.map((scorer) => scorer({ output, data: item }))
-				);
+    // Process all items concurrently with limited concurrency
+    const promises = data.map((item, index): Promise<Score[]> => {
+      return limit(async (): Promise<Score[]> => {
+        const output = await this.#taskFn({ data: item });
+        const scores = await Promise.all(
+          this.#scorers.map((scorer): Score | Promise<Score> => {
+            return scorer({ output, data: item });
+          }),
+        );
 
-				// Write individual score to JSONL file if outputDir is specified
-				if (outputFilePath !== undefined) {
-					await this.#appendScoreToJsonl(
-						scores,
-						index,
-						item,
-						output,
-						outputFilePath
-					);
-				}
+        // Write individual score to JSONL file if outputDir is specified
+        if (outputFilePath !== undefined) {
+          await this.#appendScoreToJsonl(
+            scores,
+            index,
+            item,
+            output,
+            outputFilePath,
+          );
+        }
 
-				completed++;
-				progressBar.update(completed);
+        completed++;
+        progressBar.update(completed);
 
-				return scores;
-			});
-		});
+        return scores;
+      });
+    });
 
-		// Wait for all items to be processed
-		const allScores = await Promise.all(promises);
-		progressBar.stop();
-		// Return scores and statistics
-		return { scores: allScores };
-	}
+    // Wait for all items to be processed
+    const allScores = await Promise.all(promises);
+    progressBar.stop();
+    // Return scores and statistics
+    return { scores: allScores };
+  }
 
-	// Helper method to append a score to the JSONL file
-	async #appendScoreToJsonl(
-		scores: Score[],
-		index: number,
-		item: DataItem<Input, Expected>,
-		output: Output,
-		filePath: string
-	): Promise<void> {
-		const fs = await import('fs/promises');
+  // Helper method to append a score to the JSONL file
+  async #appendScoreToJsonl(
+    scores: Score[],
+    index: number,
+    item: DataItem<Input, Expected>,
+    output: Output,
+    filePath: string,
+  ): Promise<void> {
+    const fs = await import("fs/promises");
 
-		// Create a record that includes the score, the index, and relevant metadata
-		const record = {
-			scores,
-			index,
-			input: item.input,
-			expected: item.expected,
-			metadata: item.metadata,
-			output,
-		};
+    // Create a record that includes the score, the index, and relevant metadata
+    const record = {
+      scores,
+      index,
+      input: item.input,
+      expected: item.expected,
+      metadata: item.metadata,
+      output,
+    };
 
-		// Append as a single line (JSONL format)
-		await fs.appendFile(filePath, `${JSON.stringify(record)}\n`);
-	}
-
-	// Helper method to calculate score statistics
-	#calculateScoreStats(scores: Score[]): ScoreStats {
-		// Group scores by name
-		const scoresByName: Record<string, number[]> = {};
-
-		// Assuming Score objects have a structure like { name: string, value: number, ... }
-		for (const score of scores) {
-			// Handle different score structures
-			const name = score.name;
-			const value = score.value;
-
-			// TODO: fix this
-
-			scoresByName[name] ??= [];
-			scoresByName[name].push(value);
-		}
-
-		// Calculate averages for each score name
-		const averages: Record<string, number> = {};
-		for (const [name, values] of Object.entries(scoresByName)) {
-			averages[name] = calculateAverage(values);
-		}
-
-		return { averages };
-	}
+    // Append as a single line (JSONL format)
+    await fs.appendFile(filePath, `${JSON.stringify(record)}\n`);
+  }
 }

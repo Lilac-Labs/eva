@@ -1,0 +1,46 @@
+# Source files
+src/
+tests/
+*.test.ts
+*.spec.ts
+
+# Development files
+.env*
+.vscode/
+.idea/
+*.log
+coverage/
+.nyc_output/
+
+# Build artifacts
+node_modules/
+.turbo/
+build/
+out/
+
+# Configuration files
+tsconfig.json
+tsconfig.*.json
+eslint.config.mjs  
+.prettierrc*
+.eslintrc*
+.eslintignore
+.prettierignore
+bun.lockb
+package-lock.json
+yarn.lock
+
+# Git and CI files
+.git/
+.github/
+.gitignore
+.gitattributes
+
+# Documentation
+CLAUDE.md
+*.md
+!README.md
+
+# Other
+.DS_Store
+Thumbs.db
