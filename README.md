@@ -1,6 +1,6 @@
 # eva
 
-[![npm version](https://badge.fury.io/js/@lilac-labs%2Feva.svg)](https://badge.fury.io/js/@lilac-labs%2Feva)
+[![npm version](https://badge.fury.io/js/eva-ts.svg)](https://badge.fury.io/js/eva-ts)
 [![CI](https://github.com/lilac-labs/eva/actions/workflows/ci.yml/badge.svg)](https://github.com/lilac-labs/eva/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -20,14 +20,14 @@ A powerful TypeScript evaluation framework for running concurrent evaluations wi
 ## 📦 Installation
 
 ```bash
-npm install @lilac-labs/eva
+npm install eva-ts
 ```
 
 ## 🚀 Quick Start
 
 ```typescript
-import { Eval } from "@lilac-labs/eva";
-import type { DataItem, BaseScore } from "@lilac-labs/eva";
+import { Eval } from "eva-ts";
+import type { DataItem, BaseScore } from "eva-ts";
 
 // Define your evaluation types
 interface MyInput {
