@@ -1,0 +1,10 @@
+{
+  "name": "@eva/dash",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Dashboard app not implemented yet'",
+    "build": "echo 'Dashboard app not implemented yet'",
+    "start": "echo 'Dashboard app not implemented yet'"
+  }
+}
