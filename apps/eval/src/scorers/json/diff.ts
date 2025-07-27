@@ -95,7 +95,11 @@ export function scoreJsonDiff(
               return "[object Object]";
             }
           }
-          return String(value);
+          if (typeof value === "string") return value;
+          if (typeof value === "number" || typeof value === "boolean") {
+            return String(value);
+          }
+          return "[object Object]";
         };
         differences.push(
           `${path}: expected ${formatValue(exp)}, got ${formatValue(act)}`,

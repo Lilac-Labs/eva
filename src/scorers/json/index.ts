@@ -1,1 +1,0 @@
-export { scoreJsonDiff, type JsonDiffScore } from "./diff.js";
