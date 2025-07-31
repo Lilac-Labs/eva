@@ -1,0 +1,5 @@
+[test]
+# Mock @repo/db for unit tests to avoid database dependencies
+mock = [
+  ["@repo/db", "../../packages/db/__mocks__/index.ts"]
+]

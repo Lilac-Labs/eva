@@ -26,6 +26,7 @@ When writing tests, you will:
 5. Include setup and teardown code as needed
 6. Ensure tests are independent and can run in any order
 7. Add comments explaining complex test scenarios or business logic being validated
+8. Deterministic tests that do not rely on environment variables or external calls are in *.test.ts. *.spec.ts are tests integration tests that make actual calls
 
 Your tests should be:
 - Fast and reliable
