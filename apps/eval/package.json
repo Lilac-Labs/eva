@@ -1,6 +1,6 @@
 {
 	"name": "eva-ts",
-	"version": "0.1.5",
+	"version": "1.0.0",
 	"description": "A TypeScript evaluation framework for running concurrent evaluations with progress tracking and result persistence",
 	"keywords": [
 		"evaluation",
