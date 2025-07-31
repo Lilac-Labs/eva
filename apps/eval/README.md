@@ -135,8 +135,51 @@ interface EvalConfig {
   name: string; // Evaluation name
   maxConcurrency: number; // Concurrent task limit
   outputDir?: string; // Optional JSONL output directory
+  projectName?: string; // Optional database project name
+  evalDescription?: string; // Optional evaluation description
 }
 ```
+
+## 🗄️ Database Setup (Optional)
+
+Eva supports optional database persistence for evaluation runs and results. We recommend using **Supabase** for easy setup and management.
+
+### Using Supabase (Recommended)
+
+1. **Create a Supabase project**:
+   - Go to [supabase.com](https://supabase.com) and create a new project
+   - Note your project URL and password from the project settings
+
+2. **Set environment variable**:
+   ```bash
+   export DATABASE_URL="postgresql://postgres:[PASSWORD]@[HOST]:6543/postgres?pgbouncer=true&connection_limit=1"
+   ```
+   
+   Replace `[PASSWORD]` and `[HOST]` with your Supabase credentials. Use port `6543` for connection pooling (recommended) or `5432` for direct connection.
+
+3. **Configure your evaluation**:
+   ```typescript
+   const evaluation = new Eval({
+     config: {
+       name: "my-evaluation",
+       maxConcurrency: 3,
+       projectName: "my-project", // Required for database storage
+       evalDescription: "Testing my AI model", // Optional description
+     },
+     // ... rest of configuration
+   });
+   ```
+
+### Database Schema
+
+When database config is provided, Eva automatically creates a hierarchical structure:
+- **Projects** → **Evaluation Names** → **Evaluation Runs** → **Results**
+- Stores input, expected output, actual output, scores, and metadata in JSONB format
+- Supports querying, filtering, and statistical analysis of evaluation data
+
+### Alternative Database Setup
+
+Eva uses Drizzle ORM and supports any PostgreSQL database. For other providers, simply set the `DATABASE_URL` environment variable to your PostgreSQL connection string.
 
 ## 🎯 Scoring Examples
 
