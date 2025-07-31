@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/lilac-labs/eva/compare/eva-ts-v1.0.1...eva-ts-v1.0.2) (2025-07-31)
+
+
+### Bug Fixes
+
+* **eval:** only publish eva-ts ([56aafe5](https://github.com/lilac-labs/eva/commit/56aafe58959925b1ed4cd92baa57093097dce04c))
+
 ## [1.0.1](https://github.com/lilac-labs/eva/compare/eva-ts-v1.0.0...eva-ts-v1.0.1) (2025-07-31)
 
 
