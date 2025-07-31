@@ -2,6 +2,8 @@ export interface EvalConfig {
   name: string;
   maxConcurrency: number;
   outputDir?: string;
+  projectName?: string;
+  evalDescription?: string;
 }
 
 export interface BaseScore {

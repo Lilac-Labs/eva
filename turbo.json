@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "globalDependencies": ["**/.env.*local", ".env"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -24,6 +24,30 @@
       "persistent": true
     },
     "clean": {
+      "cache": false
+    },
+    "db:generate": {
+      "cache": false,
+      "outputs": ["drizzle/**"],
+      "inputs": ["schema.ts", "drizzle.config.ts"]
+    },
+    "db:push": {
+      "cache": false,
+      "inputs": ["schema.ts", "drizzle.config.ts"]
+    },
+    "db:pull": {
+      "cache": false,
+      "outputs": ["schema.ts"]
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:check": {
+      "cache": false,
+      "inputs": ["schema.ts", "drizzle.config.ts"]
+    },
+    "db:drop": {
       "cache": false
     }
   }

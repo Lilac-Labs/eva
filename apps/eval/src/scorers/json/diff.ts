@@ -1,7 +1,7 @@
-import type { BaseScore } from "../../eval/eval.types.js";
+import type { BaseScore } from '../../eval/eval.types.js';
 
 export interface JsonDiffScore extends BaseScore {
-  name: "json_diff";
+  name: 'json_diff';
   value: number;
   details?: {
     differences: string[];
@@ -18,7 +18,7 @@ export function scoreJsonDiff(
   let totalFields = 0;
   let matchingFields = 0;
 
-  const findDifferences = (exp: unknown, act: unknown, path = ""): void => {
+  const findDifferences = (exp: unknown, act: unknown, path = ''): void => {
     if (exp === null && act === null) {
       matchingFields++;
       totalFields++;
@@ -39,7 +39,7 @@ export function scoreJsonDiff(
       return;
     }
 
-    if (typeof exp === "object" && typeof act === "object") {
+    if (typeof exp === 'object' && typeof act === 'object') {
       if (Array.isArray(exp) !== Array.isArray(act)) {
         differences.push(`${path}: array/object mismatch`);
         totalFields++;
@@ -87,19 +87,19 @@ export function scoreJsonDiff(
         matchingFields++;
       } else {
         const formatValue = (value: unknown): string => {
-          if (value === null) return "null";
-          if (typeof value === "object") {
+          if (value === null) return 'null';
+          if (typeof value === 'object') {
             try {
               return JSON.stringify(value);
             } catch {
-              return "[object Object]";
+              return '[object Object]';
             }
           }
-          if (typeof value === "string") return value;
-          if (typeof value === "number" || typeof value === "boolean") {
+          if (typeof value === 'string') return value;
+          if (typeof value === 'number' || typeof value === 'boolean') {
             return String(value);
           }
-          return "[object Object]";
+          return '[object Object]';
         };
         differences.push(
           `${path}: expected ${formatValue(exp)}, got ${formatValue(act)}`,
@@ -113,7 +113,7 @@ export function scoreJsonDiff(
   const accuracy = totalFields > 0 ? matchingFields / totalFields : 0;
 
   return {
-    name: "json_diff",
+    name: 'json_diff',
     value: accuracy,
     details: {
       differences,

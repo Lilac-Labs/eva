@@ -129,6 +129,7 @@ export default [
 			'@typescript-eslint/no-empty-interface': 'off',
 			'@typescript-eslint/no-empty-object-type': 'off',
 			'@typescript-eslint/no-unsafe-member-access': 'off',
+			'@typescript-eslint/no-redundant-type-constituents': 'off',
 
 			'no-mixed-spaces-and-tabs': 'off',
 		},

@@ -1,7 +1,7 @@
-import type { BaseScore } from "../../eval/eval.types.js";
+import type { BaseScore } from '../../eval/eval.types.js';
 
 export interface StringDiffScore extends BaseScore {
-  name: "string_diff";
+  name: 'string_diff';
   value: number;
   details?: {
     levenshteinDistance: number;
@@ -48,7 +48,7 @@ export function scoreStringDiff(
   const similarity = maxLength === 0 ? 1 : 1 - distance / maxLength;
 
   return {
-    name: "string_diff",
+    name: 'string_diff',
     value: similarity,
     details: {
       levenshteinDistance: distance,
@@ -60,7 +60,7 @@ export function scoreStringDiff(
 }
 
 export interface StringExactScore extends BaseScore {
-  name: "string_exact";
+  name: 'string_exact';
   value: number;
 }
 
@@ -69,7 +69,7 @@ export function scoreStringExact(
   actual: string,
 ): StringExactScore {
   return {
-    name: "string_exact",
+    name: 'string_exact',
     value: expected === actual ? 1 : 0,
   };
 }
