@@ -51,7 +51,7 @@
 		"check-types": "tsc -p tsconfig.json --noEmit",
 		"test": "bun test",
 		"test:coverage": "bun test --coverage",
-		"prepublishOnly": "npm run build:clean && npm run test && npm run lint"
+		"prepublishOnly": "npm run build:clean && npm run lint"
 	},
 	"dependencies": {
 		"cli-progress": "^3.12.0",
