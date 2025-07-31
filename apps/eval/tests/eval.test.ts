@@ -11,7 +11,7 @@ import {
 import { rmSync, existsSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { mockDb } from '@repo/db';
+import { mockDb } from '@repo/db/__mocks__';
 
 // Mock the database functions to prevent actual database calls
 mock.module('@repo/db', () => mockDb());

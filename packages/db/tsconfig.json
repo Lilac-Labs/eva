@@ -23,6 +23,12 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["connection.ts", "index.ts", "operations.ts", "schema.ts"],
+  "include": [
+    "connection.ts",
+    "index.ts",
+    "operations.ts",
+    "schema.ts",
+    "__mocks__/*.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

@@ -10,6 +10,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./__mocks__": {
+      "types": "./dist/__mocks__/index.d.ts",
+      "import": "./dist/__mocks__/index.js"
     }
   },
   "scripts": {
