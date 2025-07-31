@@ -33,13 +33,18 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
       - name: Install dependencies
         run: npm ci
 
       - name: Build and test
         run: |
           npm run build --workspace=eva-ts
-          npm run test --workspace=eva-ts
+          bun test --cwd apps/eval
           npm run lint --workspace=eva-ts
 
       - name: Release
