@@ -17,6 +17,7 @@ import { Presets, SingleBar } from 'cli-progress';
 import pLimit from 'p-limit';
 
 import type { BaseScore, DataItem, EvalConfig } from './eval.types';
+
 export class Eval<Input, Expected, Output, Score extends BaseScore> {
   readonly #dataProvider: () =>
     | Array<DataItem<Input, Expected>>
