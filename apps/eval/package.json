@@ -55,7 +55,8 @@
 	},
 	"dependencies": {
 		"cli-progress": "^3.12.0",
-		"p-limit": "^6.2.0"
+		"p-limit": "^6.2.0",
+		"@repo/db": "*"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^19.8.1",

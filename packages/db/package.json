@@ -1,0 +1,45 @@
+{
+  "name": "@repo/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "build:clean": "rm -rf dist && npm run build",
+    "clean": "rm -rf .turbo node_modules dist",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "check-types": "tsc -p tsconfig.json --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit introspect",
+    "db:studio": "drizzle-kit studio",
+    "db:drop": "drizzle-kit drop",
+    "db:check": "drizzle-kit check",
+    "db:up": "drizzle-kit up"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.44.4",
+    "postgres": "^3.4.7",
+    "dotenv": "^17.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "drizzle-kit": "^0.31.4",
+    "tsc-alias": "^1.8.16",
+    "typescript": "5.8.3",
+    "eslint": "^9.32.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "globals": "^16.3.0"
+  }
+}

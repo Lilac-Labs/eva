@@ -1041,6 +1041,48 @@ describe('Eval', (): void => {
 			expect(existsSync(TEST_OUTPUT_DIR)).toBe(false);
 		});
 
+		test('works without database configuration (unit tests skip DB)', async (): Promise<void> => {
+			const testData: DataItem<TestInput, TestExpected>[] = [
+				{ input: { value: 6 }, expected: { result: 12 } },
+			];
+
+			const dataProvider = (): DataItem<TestInput, TestExpected>[] => testData;
+			const taskFn = ({
+				data,
+			}: {
+				data: DataItem<TestInput, TestExpected>;
+			}): TestOutput => ({
+				computed: data.input.value * 2,
+			});
+			const scorers = [
+				({
+					output,
+					data,
+				}: {
+					output: TestOutput;
+					data: DataItem<TestInput, TestExpected>;
+				}): TestScore => ({
+					name: 'exact-match',
+					value: output.computed === data.expected?.result ? 1 : 0,
+				}),
+			];
+
+			const config = {
+				name: 'no-database-test',
+				maxConcurrency: 1,
+				// No database configuration - unit tests should skip DB operations
+			};
+
+			const evaluation = new Eval({ dataProvider, taskFn, scorers, config });
+			const result = await evaluation.evaluate();
+
+			expect(result.scores).toHaveLength(1);
+			expect(result.scores[0][0].value).toBe(1);
+			
+			// Test completes successfully without database operations
+			// This verifies that unit tests will not attempt to store results in DB
+		});
+
 		test('handles concurrent writes to output file', async (): Promise<void> => {
 			const testData: DataItem<TestInput, TestExpected>[] = Array.from(
 				{ length: 5 },

@@ -3,4 +3,4 @@ export {
   scoreStringExact,
   type StringDiffScore,
   type StringExactScore,
-} from "./diff.js";
+} from './diff.js';
