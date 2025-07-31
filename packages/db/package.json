@@ -1,7 +1,6 @@
 {
   "name": "@repo/db",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -10,10 +9,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./__mocks__": {
-      "types": "./dist/__mocks__/index.d.ts",
-      "import": "./dist/__mocks__/index.js"
     }
   },
   "scripts": {
