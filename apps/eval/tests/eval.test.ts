@@ -8,13 +8,28 @@ import {
   beforeAll,
   afterAll,
 } from 'bun:test';
+
+// Set up database mocking BEFORE any imports that might trigger @repo/db
+const mockDb = () => ({
+  bulkCreateEvalResults: mock(() => Promise.resolve()),
+  completeEvalRun: mock(() => Promise.resolve()),
+  createEvalRun: mock(() => Promise.resolve({ id: 'mock-run-id' })),
+  failEvalRun: mock(() => Promise.resolve()),
+  findOrCreateEvalContext: mock(() =>
+    Promise.resolve({
+      project: { id: 'mock-project-id', name: 'mock-project' },
+      evalName: { id: 'mock-eval-name-id', name: 'mock-eval' },
+    }),
+  ),
+  updateEvalRunProgress: mock(() => Promise.resolve()),
+});
+
+// Mock the database module before it's imported anywhere
+mock.module('@repo/db', () => mockDb());
+
 import { rmSync, existsSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { mockDb } from '@repo/db/__mocks__';
-
-// Mock the database functions to prevent actual database calls
-mock.module('@repo/db', () => mockDb());
 
 import { Eval } from '../src/eval';
 import type { BaseScore, DataItem } from '../src/eval/eval.types';
