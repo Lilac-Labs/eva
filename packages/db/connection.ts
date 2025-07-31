@@ -10,17 +10,22 @@ config();
 // Use transaction pooler URL for high-concurrency scenarios
 const connectionString = process.env.DATABASE_URL;
 
-if (!connectionString) {
+if (!connectionString && process.env.NODE_ENV !== 'test') {
   throw new Error('DATABASE_URL environment variable is required');
 }
 
 // Configure postgres client for Supabase
-const client = postgres(connectionString, {
+const client = postgres(connectionString!, {
   prepare: false,
 });
 
 // Create Drizzle instance with schema
-export const db = drizzle(client, { schema });
+export const db =
+  process.env.NODE_ENV === 'test'
+    ? drizzle.mock({
+        schema,
+      })
+    : drizzle(client, { schema });
 
 // Export the client for advanced usage
 export { client };

@@ -9,24 +9,6 @@ import {
   afterAll,
 } from 'bun:test';
 
-// Set up database mocking BEFORE any imports that might trigger @repo/db
-const mockDb = () => ({
-  bulkCreateEvalResults: mock(() => Promise.resolve()),
-  completeEvalRun: mock(() => Promise.resolve()),
-  createEvalRun: mock(() => Promise.resolve({ id: 'mock-run-id' })),
-  failEvalRun: mock(() => Promise.resolve()),
-  findOrCreateEvalContext: mock(() =>
-    Promise.resolve({
-      project: { id: 'mock-project-id', name: 'mock-project' },
-      evalName: { id: 'mock-eval-name-id', name: 'mock-eval' },
-    }),
-  ),
-  updateEvalRunProgress: mock(() => Promise.resolve()),
-});
-
-// Mock the database module before it's imported anywhere
-mock.module('@repo/db', () => mockDb());
-
 import { rmSync, existsSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
@@ -70,15 +52,6 @@ interface ConcurrencyTestScore extends BaseScore {
 const TEST_OUTPUT_DIR = './test-output';
 
 describe('Eval', (): void => {
-  beforeAll((): void => {
-    // Set mock DATABASE_URL before any database operations
-    process.env.DATABASE_URL = 'postgresql://mock:mock@localhost:5432/mock';
-  });
-
-  afterAll((): void => {
-    // Clean up environment variable
-    delete process.env.DATABASE_URL;
-  });
   beforeEach((): void => {
     // Clean up test output directory
     if (existsSync(TEST_OUTPUT_DIR)) {
