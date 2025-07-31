@@ -183,6 +183,7 @@ export class Eval<Input, Expected, Output, Score extends BaseScore> {
           // Update progress in database less frequently
           if (
             this.#currentEvalRun !== null &&
+            progressUpdateInterval > 0 &&
             (completed % progressUpdateInterval === 0 ||
               completed === data.length)
           ) {
