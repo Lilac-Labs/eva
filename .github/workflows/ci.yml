@@ -47,36 +47,37 @@ jobs:
         run: npm run build
         timeout-minutes: 10
 
-  publish:
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  # publish:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
-    steps:
-      - uses: actions/checkout@v4
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          registry-url: https://registry.npmjs.org/
-          cache: 'npm'
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20.x'
+  #         registry-url: https://registry.npmjs.org/
+  #         cache: 'npm'
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
+  #     - name: Setup Bun
+  #       uses: oven-sh/setup-bun@v1
+  #       with:
+  #         bun-version: latest
 
-      - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit
+  #     - name: Install dependencies
+  #       run: npm ci --prefer-offline --no-audit
 
-      - name: Build package
-        run: npm run build
-        timeout-minutes: 10
+  #     - name: Build package
+  #       run: npm run build
+  #       timeout-minutes: 10
 
-      - name: Publish to npm (if version changed)
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        continue-on-error: true
+  #     - name: Publish to npm (if version changed)
+  #       run: npm publish --access public
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  #       continue-on-error: true
+  #       working-directory: apps/eval
