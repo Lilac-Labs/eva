@@ -9,6 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { DeleteButton } from '@/components/delete-button';
+import { deleteProject } from '@/lib/actions';
 import type { Project } from '@repo/db';
 
 interface ProjectsListProps {
@@ -27,21 +29,31 @@ export function ProjectsList({ projects }: ProjectsListProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
-        <Link key={project.id} href={`/projects/${project.id}`}>
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardHeader>
-              <CardTitle>{project.name}</CardTitle>
-              <CardDescription>
-                Created {format(new Date(project.createdAt), 'PPP')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                {project.description || 'No description provided'}
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
+        <div key={project.id} className="relative group">
+          <Link href={`/projects/${project.id}`}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <CardHeader>
+                <CardTitle>{project.name}</CardTitle>
+                <CardDescription>
+                  Created {format(new Date(project.createdAt), 'PPP')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  {project.description || 'No description provided'}
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <DeleteButton
+              onDelete={() => deleteProject(project.id)}
+              itemType="project"
+              itemName={project.name}
+              variant="icon"
+            />
+          </div>
+        </div>
       ))}
     </div>
   );

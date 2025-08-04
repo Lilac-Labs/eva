@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getProjectWithEvals } from '@/lib/actions';
 import {
@@ -9,6 +9,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ProjectDeleteButton } from '@/components/project-delete-button';
+import { EvalDeleteButton } from '@/components/eval-delete-button';
 import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
 
@@ -35,10 +37,20 @@ export default async function ProjectPage({
           </Button>
         </Link>
 
-        <h1 className="text-3xl font-bold">{project.name}</h1>
-        {project.description && (
-          <p className="text-muted-foreground mt-2">{project.description}</p>
-        )}
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold">{project.name}</h1>
+            {project.description && (
+              <p className="text-muted-foreground mt-2">
+                {project.description}
+              </p>
+            )}
+          </div>
+          <ProjectDeleteButton
+            projectId={params.projectId}
+            projectName={project.name}
+          />
+        </div>
       </div>
 
       <div className="space-y-6">
@@ -58,7 +70,13 @@ export default async function ProjectPage({
               const latestRun = evalName.evalRuns[0];
 
               return (
-                <Card key={evalName.id}>
+                <Card key={evalName.id} className="relative">
+                  <div className="absolute top-2 right-2">
+                    <EvalDeleteButton
+                      evalNameId={evalName.id}
+                      itemName={evalName.name}
+                    />
+                  </div>
                   <CardHeader>
                     <CardTitle>{evalName.name}</CardTitle>
                     {evalName.description && (
@@ -85,11 +103,17 @@ export default async function ProjectPage({
                               {latestRun.totalItems}
                             </p>
                           </div>
-                          <Link
-                            href={`/projects/${params.projectId}/runs/${latestRun.id}`}
-                          >
-                            <Button>View Results</Button>
-                          </Link>
+                          <div className="flex gap-2">
+                            <Link
+                              href={`/projects/${params.projectId}/runs/${latestRun.id}`}
+                            >
+                              <Button>View Results</Button>
+                            </Link>
+                            <EvalDeleteButton
+                              evalRunId={latestRun.id}
+                              itemName={`Run from ${format(new Date(latestRun.startedAt), 'PPp')}`}
+                            />
+                          </div>
                         </div>
                       </div>
                     ) : (

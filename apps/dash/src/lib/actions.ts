@@ -95,3 +95,39 @@ export async function getEvalRunWithResults(evalRunId: string) {
     return { success: false, error: 'Failed to fetch eval run' };
   }
 }
+
+export async function deleteProject(projectId: string) {
+  try {
+    // Delete project and all related data (cascade delete)
+    await db.delete(projects).where(eq(projects.id, projectId));
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting project:', error);
+    return { success: false, error: 'Failed to delete project' };
+  }
+}
+
+export async function deleteEvalRun(evalRunId: string) {
+  try {
+    // Delete eval run and all related results (cascade delete)
+    await db.delete(evalRuns).where(eq(evalRuns.id, evalRunId));
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting eval run:', error);
+    return { success: false, error: 'Failed to delete eval run' };
+  }
+}
+
+export async function deleteEvalName(evalNameId: string) {
+  try {
+    // Delete eval name and all related runs and results (cascade delete)
+    await db.delete(evalNames).where(eq(evalNames.id, evalNameId));
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting eval name:', error);
+    return { success: false, error: 'Failed to delete eval name' };
+  }
+}

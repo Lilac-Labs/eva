@@ -4,9 +4,11 @@ A Next.js dashboard for viewing and managing evaluation results stored in the da
 
 ## Features
 
-- **Project Management**: Create and manage projects to organize your evaluations
+- **Project Management**: Create, view, and delete projects to organize your evaluations
 - **Evaluation Results Table**: View evaluation results with dynamic scorer columns
 - **Dynamic Columns**: The results table automatically adapts to show all scorer columns from your evaluation runs
+- **Sortable Results**: Click on any column header to sort evaluation results
+- **Delete Functionality**: Safely delete projects, evaluations, or evaluation runs with confirmation dialogs
 - **Responsive Design**: Built with shadcn/ui components for a modern, responsive interface
 
 ## Getting Started
@@ -52,6 +54,11 @@ The dashboard will be available at [http://localhost:3000](http://localhost:3000
 1. **Create a Project**: Click "Create Project" on the projects page to create a new project
 2. **View Evaluations**: Click on a project to see its evaluation runs
 3. **View Results**: Click "View Results" on an evaluation run to see the detailed results table
+4. **Delete Items**:
+   - Hover over a project card to see the delete button
+   - On the project detail page, use the "Delete" button to remove the entire project
+   - Delete individual evaluations or evaluation runs using their respective delete buttons
+   - All deletions require confirmation to prevent accidental data loss
 
 ## Results Table
 
